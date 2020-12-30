@@ -61,7 +61,7 @@ class BlackJack(GameGUI):
 
         self.pwin = 0
         self.dwin = 0
-        self.statdic = {0: "In Progress...", 
+        self.statdic = {0: "In Progress... Press 'h' to hit, 's' to stand", 
                         1: "Player WINS... Press 'r' to start a new game",
                         2: "Dealer WINS... Press 'r' to start a new game",
                         3: "TIE Game...Press 'r' to start a new game"}
@@ -128,7 +128,7 @@ class BlackJack(GameGUI):
         '''
         if self.game_status == self.statdic[0]:
             self.phand.add(self.dk.deal())
-        if self.phand.total > 21:
+        if self.phand.total > 21 and self.game_status == self.statdic[0]:
             self.game_status = self.statdic[2]
             self.dwin += 1
             self.text_color2 = "red"
@@ -147,11 +147,15 @@ class BlackJack(GameGUI):
         while self.game_status == self.statdic[0] and self.dhand.total < 17:
             self.dhand.add(self.dk.deal())
         if self.dhand.total > 21 or self.dhand.total < self.phand.total:
+            if self.game_status == self.statdic[0]:
+                self.pwin += 1
             self.game_status = self.statdic[1]
-            self.pwin += 1
+            
         elif self.dhand.total > self.phand.total:
+            if self.game_status == self.statdic[0]:
+                self.dwin += 1
             self.game_status = self.statdic[2]
-            self.dwin += 1
+            
         elif self.dhand.total == self.phand.total:
             self.game_status = self.statdic[3]
         self.text_color2 = "red"
@@ -164,7 +168,6 @@ class BlackJack(GameGUI):
 def main():
     window = tk.Tk()
     window.title("Blackjack")
-    # Uncomment this out when you are ready to implement BlackJack
     game = BlackJack(window)
     window.mainloop()
 
